@@ -1,0 +1,53 @@
+openapi: 3.1.0
+info:
+  title: MAKE Webhook - Create Trello Card
+  description: Sends data to the MAKE webhook, which triggers the scenario to create a Trello card.
+  version: 1.0.0
+servers:
+  - url: https://hook.eu2.make.com/le6r4ops8bfmzidmghsnl4dz1rrt42ws
+    description: MAKE Webhook Base URL
+paths:
+  /{webhookId}:
+    post:
+      operationId: sendToMakeWebhook
+      summary: Trigger MAKE Webhook
+      description: Sends a POST request to the MAKE webhook to trigger the Trello card creation action.
+      parameters:
+        - name: webhookId
+          in: path
+          required: true
+          description: The unique ID of your MAKE webhook.
+          schema:
+            type: string
+            example: abc12345def
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                card_title:
+                  type: string
+                  description: The name of the Trello card.
+                  example: "New Task"
+                card_description:
+                  type: string
+                  description: The description of the Trello card.
+                  example: "Details about the new task."
+                due_date:
+                  type: string
+                  format: date-time
+                  description: The due date for the card (optional).
+                  example: "2024-12-15T12:00:00.000Z"
+		label:
+                  type: string
+                  description: The label for the card (optional).
+                  example: "project1"
+      responses:
+        '200':
+          description: Webhook triggered successfully.
+        '400':
+          description: Bad Request - Invalid data sent.
+        '404':
+          description: Webhook ID not found.
